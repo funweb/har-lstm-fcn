@@ -17,12 +17,15 @@ def process_file(fn):
     new_path = os.path.join(path, file_name)
 
     # Load the Tab seperated values in the dataset
+    # 在数据集中加载选项卡分隔的值
     df = pd.read_table(fn, header=None, encoding='latin-1')
 
     # Fill the empty timesteps with 0.0
+    # 用0.0填充空的时间步
     df.fillna(0.0, inplace=True)
 
     # Save the prepared dataset as a CSV file that the dataset reader can use
+    # 将准备好的数据集另存为CSV文件，以便数据集读取器使用
     df.to_csv(new_path, sep=',', index=False, header=None, encoding='latin-1')
 
     # shutil.copy(fn, new_path)

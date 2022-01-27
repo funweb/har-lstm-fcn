@@ -125,6 +125,9 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
         X_test = X_test[:val_subset]
         y_test = y_test[:val_subset]
 
+    if dataset_id == 2:
+        print("Loading train: ", TRAIN_FILES[dataset_id])
+
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, callbacks=callback_list,
               class_weight=class_weight, verbose=2, validation_data=(X_test, y_test))
 
@@ -136,8 +139,7 @@ def evaluate_model(model: Model, dataset_id, dataset_prefix, batch_size=128, tes
 
     Args:
         model: A Keras Model.
-        dataset_id: Integer id representing the dataset index containd in
-            `utils/constants.py`.
+        dataset_id: Integer id representing the dataset index containd in `utils/constants.py`. 整数id，表示包含在`utils/constants.py`'中的数据集索引。
         dataset_prefix: Name of the dataset. Used for weight saving.
         batch_size: Size of each batch for evaluation.
         test_data_subset: Optional integer id to subset the test set. To be used if

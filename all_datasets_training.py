@@ -242,7 +242,7 @@ if __name__ == "__main__":
                 file.write('%s,%s,%s,%s\n' % ('dataset_id', 'dataset_name', 'dataset_name_', 'test_accuracy'))
                 file.close()
 
-            for dname, did in dataset_map:
+            for dname, did in dataset_map[0:2]:
 
                 MAX_SEQUENCE_LENGTH = MAX_SEQUENCE_LENGTH_LIST[did]
                 NB_CLASS = NB_CLASSES_LIST[did]
@@ -265,7 +265,7 @@ if __name__ == "__main__":
                 print('*' * 20, "Training model for dataset %s" % (dname), '*' * 20)
 
                 # comment out the training code to only evaluate !
-                train_model(model, did, dataset_name_, epochs=2000, batch_size=128,
+                train_model(model, did, dataset_name_, epochs=2, batch_size=128,
                             normalize_timeseries=normalize_dataset)
 
                 acc = evaluate_model(model, did, dataset_name_, batch_size=128,

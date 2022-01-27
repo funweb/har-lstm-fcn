@@ -11,26 +11,29 @@ from utils.constants import TRAIN_FILES, TEST_FILES, MAX_SEQUENCE_LENGTH_LIST, N
 
 def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.array, np.array):
     """
-    Loads a Univaraite UCR Dataset indexed by `utils.constants`.
+    Loads a Univaraite UCR Dataset indexed by `utils.constants`.  加载由 utils.constants 索引的 Univaraite UCR 数据集。
 
     Args:
-        index: Integer index, set inside `utils.constants` that refers to the
-            dataset.
-        normalize_timeseries: Bool / Integer. Determines whether to normalize
-            the timeseries.
+        index: Integer index, set inside `utils.constants` that refers to the dataset.
+        index：整数索引，设置在引用数据集的 `utils.constants` 中。
+        normalize_timeseries: Bool / Integer. Determines whether to normalize the timeseries.
+        标准化时间序列：布尔/整数。 确定是否对时间序列进行归一化。
 
             If False, does not normalize the time series.
             If True / int not equal to 2, performs standard sample-wise
                 z-normalization.
             If 2: Performs full dataset z-normalization.
-        verbose: Whether to describe the dataset being loaded.
+        verbose: Whether to describe the dataset being loaded.  详细：是否描述正在加载的数据集。
 
     Returns:
-        A tuple of shape (X_train, y_train, X_test, y_test, is_timeseries).
-        For legacy reasons, is_timeseries is always True.
+        A tuple of shape (X_train, y_train, X_test, y_test, is_timeseries).  形状元组 (X_train, y_train, X_test, y_test, is_timeseries)。
+        For legacy reasons, is_timeseries is always True.  由于遗留原因，is_timeseries 始终为 True。
     """
     assert index < len(TRAIN_FILES), "Index invalid. Could not load dataset at %d" % index
     if verbose: print("Loading train / test dataset : ", TRAIN_FILES[index], TEST_FILES[index])
+
+    if index == 2:
+        print("now")
 
     if os.path.exists(TRAIN_FILES[index]):
         df = pd.read_csv(TRAIN_FILES[index], header=None, encoding='latin-1')
@@ -41,37 +44,37 @@ def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.arra
     else:
         raise FileNotFoundError('File %s not found!' % (TRAIN_FILES[index]))
 
-    is_timeseries = True # assume all input data is univariate time series
+    is_timeseries = True  # assume all input data is univariate time series  # 假设所有输入数据都是单变量时间序列
 
-    # remove all columns which are completely empty
+    # remove all columns which are completely empty  # 删除所有完全为空的列
     df.dropna(axis=1, how='all', inplace=True)
 
-    if not is_timeseries:
+    if not is_timeseries:  # 如果不是单变量时间序列
         data_idx = df.columns[1:]
         min_val = min(df.loc[:, data_idx].min())
         if min_val == 0:
             df.loc[:, data_idx] += 1
 
-    # fill all missing columns with 0
+    # fill all missing columns with 0  # 用 0 填充所有缺失的列
     df.fillna(0, inplace=True)
 
-    # cast all data into integer (int32)
+    # cast all data into integer (int32)  # 将所有数据转换为整数 (int32)
     if not is_timeseries:
         df[df.columns] = df[df.columns].astype(np.int32)
 
-    # extract labels Y and normalize to [0 - (MAX - 1)] range
+    # extract labels Y and normalize to [0 - (MAX - 1)] range  # 提取标签 Y 并归一化为 [0 - (MAX - 1)] 范围
     y_train = df[[0]].values
     nb_classes = len(np.unique(y_train))
     y_train = (y_train - y_train.min()) / (y_train.max() - y_train.min()) * (nb_classes - 1)
 
-    # drop labels column from train set X
+    # drop labels column from train set X  # 从训练集 X 中删除标签列
     df.drop(df.columns[0], axis=1, inplace=True)
 
     X_train = df.values
 
     if is_timeseries:
         X_train = X_train[:, np.newaxis, :]
-        # scale the values
+        # scale the values  # 缩放值
         if normalize_timeseries:
             normalize_timeseries = int(normalize_timeseries)
 
@@ -202,8 +205,8 @@ def plot_dataset(dataset_id, seed=None, limit=None, cutoff=None,
 
     if plot_data is None:
         X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(
-                                                               dataset_id,
-                                                               normalize_timeseries=normalize_timeseries)
+            dataset_id,
+            normalize_timeseries=normalize_timeseries)
 
         if not is_timeseries:
             print("Can plot time series input data only!\n"
@@ -352,26 +355,26 @@ def plot_dataset(dataset_id, seed=None, limit=None, cutoff=None,
         cols = 2
 
     fig, axs = plt.subplots(rows, cols, squeeze=False,
-                           tight_layout=True, figsize=(8, 6))
+                            tight_layout=True, figsize=(8, 6))
     axs[0][0].set_title('Train dataset', size=16)
     axs[0][0].set_xlabel('timestep')
     axs[0][0].set_ylabel('value')
     train_df.plot(subplots=False,
                   legend='best',
-                  ax=axs[0][0],)
+                  ax=axs[0][0], )
 
     axs[0][1].set_title('Test dataset', size=16)
     axs[0][1].set_xlabel('timestep')
     axs[0][1].set_ylabel('value')
     test_df.plot(subplots=False,
                  legend='best',
-                 ax=axs[0][1],)
+                 ax=axs[0][1], )
 
     if plot_data is not None and X_train_attention is not None:
         columns = ['Class %d' % (i + 1) for i in range(X_train_attention.shape[1])]
         train_attention_df = pd.DataFrame(X_train_attention,
-                            index=range(X_train_attention.shape[0]),
-                            columns=columns)
+                                          index=range(X_train_attention.shape[0]),
+                                          columns=columns)
 
         axs[1][0].set_title('Train %s Sequence' % (type), size=16)
         axs[1][0].set_xlabel('timestep')
@@ -398,8 +401,8 @@ def plot_dataset(dataset_id, seed=None, limit=None, cutoff=None,
 
 def cutoff_choice(dataset_id, sequence_length):
     """
-    Helper to allow the user to select whether they want to cutoff timesteps or not,
-    and in what manner (pre or post).
+    Helper to allow the user to select whether they want to cutoff timesteps or not, and in what manner (pre or post).
+    Helper 允许用户选择是否要截止时间步长，以及以何种方式（前或后）。
 
     Args:
         dataset_id: Dataset ID

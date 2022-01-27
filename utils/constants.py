@@ -517,3 +517,13 @@ NB_CLASSES_LIST = [37, # 0
                    3, # 126
                    3, # 127
                    ]
+
+
+TEST_FILES = ['../data//Adiac_TEST',  # 0
+              '../data//ArrowHead_TEST',  # 1
+]
+
+TRAIN_FILES = ['../data//Adiac_TEST',  # 0
+              '../data//ArrowHead_TEST',  # 1
+]
+

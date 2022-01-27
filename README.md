@@ -1,7 +1,7 @@
 # LSTM FCN for Time Series Classification
 LSTM FCN models, from the paper [LSTM Fully Convolutional Networks for Time Series Classification](https://ieeexplore.ieee.org/document/8141873/), augment the fast classification performance of Temporal Convolutional layers with the precise classification of Long Short Term Memory Recurrent Neural Networks.
 
-<img src="https://github.com/titu1994/LSTM-FCN/blob/master/images/LSTM-FCN.png?raw=true" height=100% width=100%>
+<img src="./images/LSTM-FCN.png?raw=true" height=100% width=100%>
 
 ## Multivariate LSTM-FCN for Time Series Classification
 General LSTM-FCNs are high performance models for univariate datasets. However, on multivariate datasets, we find that their performance is not optimal if applied directly. Therefore, we introduce **Multivariate LSTM-FCN (MLSTM-FCN)** for such datasets.
@@ -101,17 +101,17 @@ To visualize the class activation map of the final convolution layer, execute th
 # Results
 
 ## Results Based on Test Validation Checkpoint
-<img src="https://github.com/titu1994/LSTM-FCN/blob/master/images/LSTM-FCN-scores.png?raw=true" height=100% width=100%>
+<img src="./images/LSTM-FCN-scores.png?raw=true" height=100% width=100%>
 
 ## Results Based on Minimum Training Loss
-<img src="https://github.com/titu1994/LSTM-FCN/blob/master/images/LSTM-FCN-training_loss-scores.jpeg?raw=true" height=100% width=100%>
+<img src="./images/LSTM-FCN-training_loss-scores.jpeg?raw=true" height=100% width=100%>
 
 ## Critical Difference Diagram
-<img src="https://github.com/titu1994/LSTM-FCN/blob/master/images/CD-training_loss.jpeg?raw=true" height=100% width=100%>
+<img src="./images/CD-training_loss.jpeg?raw=true" height=100% width=100%>
 
 ## Wilcoxson Signed Rank Test - Statistical Test
 After applying a Dunn-Sidak Correction, we compare the p-value table to an alpha level of 0.00465. Results show ALSTM, LSTM, and the Ensemble Methods (COTE and EE) are statistically the same.
-<img src="https://github.com/titu1994/LSTM-FCN/blob/master/images/P-Value-training_loss.jpeg?raw=true" height=100% width=100%>
+<img src="./images/P-Value-training_loss.jpeg?raw=true" height=100% width=100%>
 
 # Citation
 ```
