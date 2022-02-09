@@ -1,3 +1,5 @@
 dataset_id,dataset_name,dataset_name_,test_accuracy
 0,Adiac,alstmfcn_128_cells_weights/Adiac,0.033248
 1,ArrowHead,alstmfcn_128_cells_weights/ArrowHead,0.537143
+0,Adiac,alstmfcn_128_cells_weights/Adiac,0.046036
+1,ArrowHead,alstmfcn_128_cells_weights/ArrowHead,0.565714

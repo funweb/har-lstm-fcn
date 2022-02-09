@@ -84,8 +84,8 @@ if __name__ == '__main__':
     num_cells = 8
     model = generate_lstmfcn  # Select model to build
 
-    # OLD 85 DATASET PARAMETERS
-    dataset_name = '' # 'cbf'  # set to None to try to find out automatically for new datasets
+    # OLD 85 DATASET PARAMETERS  # 设置为 None 以尝试自动查找新数据集
+    dataset_name = ''  # 'cbf'  # set to None to try to find out automatically for new datasets
 
     # NEW 43 DATASET PARAMETERS
     model_name = 'lstmfcn'
@@ -102,9 +102,9 @@ if __name__ == '__main__':
     if DATASET_ID >= 85:
         dataset_name = None
 
-    if dataset_name is None:
+    if dataset_name == "":
         base_weights_dir = '%s_%d_cells_weights/'
-        dataset_name = TRAIN_FILES[DATASET_ID][8:-6]
+        dataset_name = TRAIN_FILES[DATASET_ID][8:-5]  # TODO: 这个分割之后操作可能更好
         weights_dir = base_weights_dir % (model_name, num_cells)
 
         dataset_name = weights_dir + dataset_name

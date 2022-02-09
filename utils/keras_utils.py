@@ -561,11 +561,28 @@ def visualize_cam(model: Model, dataset_id, dataset_prefix, class_id,
             If 2: Performs full dataset z-normalization.
         seed: Random seed number for Numpy.
     """
+    """
+     用于可视化 Keras 模型的类激活图。
+
+     参数：
+         模型：一个 Keras 模型。
+         dataset_id：整数id，表示包含在中的数据集索引
+             `utils/constants.py`。
+         dataset_prefix：数据集的名称。 Used for weight saving.
+         class_id：要可视化其激活的类的索引。
+         cutoff: 可选整数，它从输入信号中分割第一个“cutoff”时间步长。
+         normalize_timeseries：布尔/整数。 确定是否归一化
+             时间序列。
+
+             如果为 False，则不对时间序列进行标准化。
+             如果 True / int 不等于 2，则执行标准样本 z 归一化。
+             如果为 2：执行完整的数据集 z 归一化。
+         seed：Numpy 的随机种子数。
+     """
 
     np.random.seed(seed)
 
-    X_train, y_train, _, _, is_timeseries = load_dataset_at(dataset_id,
-                                                            normalize_timeseries=normalize_timeseries)
+    X_train, y_train, _, _, is_timeseries = load_dataset_at(dataset_id, normalize_timeseries=normalize_timeseries)
     _, sequence_length = calculate_dataset_metrics(X_train)
 
     if sequence_length != MAX_SEQUENCE_LENGTH_LIST[dataset_id]:
@@ -647,6 +664,7 @@ def visualize_cam(model: Model, dataset_id, dataset_prefix, class_id,
 def write_cam(model: Model, dataset_id, dataset_prefix,
               cutoff=None, normalize_timeseries=False):
     """ Same as visualize_cam, but writes the result data to a file. """
+    """ 与visualize_cam 相同，但将结果数据写入文件。"""
 
     _, _, X_test, y_test, is_timeseries = load_dataset_at(dataset_id,
                                                           normalize_timeseries=normalize_timeseries)
