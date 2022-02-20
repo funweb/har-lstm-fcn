@@ -13,3 +13,5 @@ dataset_id,dataset_name,dataset_name_,test_accuracy
 1,cairo_9999_1,alstmfcn_8_cells_weights/cairo_9999_1,0.693095
 0,cairo_9999_0,alstmfcn_8_cells_weights/cairo_9999_0,0.668367
 1,cairo_9999_1,alstmfcn_8_cells_weights/cairo_9999_1,0.667519
+0,cairo_9999_0,alstmfcn_8_cells_weights/cairo_9999_0,0.645408
+1,cairo_9999_1,alstmfcn_8_cells_weights/cairo_9999_1,0.657289

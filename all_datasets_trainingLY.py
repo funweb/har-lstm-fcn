@@ -283,10 +283,10 @@ def train_val():
                 df = df.append(dict_restule, ignore_index=True)
 
             print(df)
+            df.to_csv(os.path.join("Results", "casas", l[2].split("/")[0]+".csv"))
 
             print('\n\n')
             print('*' * 20, "Failures", '*' * 20)
-            print()
 
             for line in failures:
                 print(line)
