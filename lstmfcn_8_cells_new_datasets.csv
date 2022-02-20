@@ -140,3 +140,16 @@ dataset_id,dataset_name,dataset_name_,test_accuracy
 0,cairo_9999_0,lstmfcn_8_cells_weights/cairo_9999_0,0.704082
 1,cairo_9999_1,lstmfcn_8_cells_weights/cairo_9999_1,0.601023
 2,cairo_9999_2,lstmfcn_8_cells_weights/cairo_9999_2,0.680307
+0,cairo_9999_0,lstmfcn_8_cells_weights/cairo_9999_0,0.665816
+0,cairo_9999_0,lstmfcn_8_cells_weights/cairo_9999_0,0.635204
+0,cairo_9999_0,lstmfcn_8_cells_weights/cairo_9999_0,0.673469
+1,cairo_9999_1,lstmfcn_8_cells_weights/cairo_9999_1,0.695652
+2,cairo_9999_2,lstmfcn_8_cells_weights/cairo_9999_2,0.675192
+3,cairo_999_0,lstmfcn_8_cells_weights/cairo_999_0,0.640306
+4,cairo_999_1,lstmfcn_8_cells_weights/cairo_999_1,0.496164
+5,cairo_999_2,lstmfcn_8_cells_weights/cairo_999_2,0.667519
+6,cairo_1_0,lstmfcn_8_cells_weights/cairo_1_0,0.635204
+7,cairo_1_1,lstmfcn_8_cells_weights/cairo_1_1,0.636829
+8,cairo_1_2,lstmfcn_8_cells_weights/cairo_1_2,0.647059
+9,cairo_2_0,lstmfcn_8_cells_weights/cairo_2_0,0.653061
+10,cairo_2_1,lstmfcn_8_cells_weights/cairo_2_1,0.639386

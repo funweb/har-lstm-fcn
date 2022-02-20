@@ -114,7 +114,7 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
     reduce_lr = ReduceLROnPlateau(monitor='loss', patience=100, mode='auto',
                                   factor=factor, cooldown=0, min_lr=1e-4, verbose=2)
 
-    early_stop = EarlyStopping(monitor='loss', patience=100, verbose=1, mode='auto')
+    early_stop = EarlyStopping(monitor='loss', patience=100, verbose=0, mode='auto')
 
     callback_list = [model_checkpoint, reduce_lr, early_stop]
 
