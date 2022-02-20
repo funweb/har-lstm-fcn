@@ -16,7 +16,7 @@ from keras.layers import Permute
 from keras.optimizers import Adam
 from keras.utils import to_categorical
 from keras.preprocessing.sequence import pad_sequences
-from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, LearningRateScheduler
+from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, LearningRateScheduler, EarlyStopping
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras import backend as K
 
@@ -114,7 +114,9 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
     reduce_lr = ReduceLROnPlateau(monitor='loss', patience=100, mode='auto',
                                   factor=factor, cooldown=0, min_lr=1e-4, verbose=2)
 
-    callback_list = [model_checkpoint, reduce_lr]
+    early_stop = EarlyStopping(monitor='loss', patience=200, verbose=1, mode='auto')
+
+    callback_list = [model_checkpoint, reduce_lr, early_stop]
 
     optm = Adam(lr=learning_rate)
 

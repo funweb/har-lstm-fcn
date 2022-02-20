@@ -81,7 +81,7 @@ def generate_alstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
     return model
 
 
-def train_val():
+def train_val(epochs=2, batch_size=128):
     dataset_map = [('cairo_9999_0', 0),
                    ('cairo_9999_1', 1),
                    ('cairo_9999_2', 2),
@@ -242,9 +242,9 @@ def train_val():
                 print('*' * 20, "Training model for dataset %s" % (dname), '*' * 20)
 
                 # comment out the training code to only evaluate !
-                train_model(model, did, dataset_name_, epochs=2, batch_size=128, normalize_timeseries=normalize_dataset)
+                train_model(model, did, dataset_name_, epochs=epochs, batch_size=batch_size, normalize_timeseries=normalize_dataset)
 
-                acc = evaluate_model(model, did, dataset_name_, batch_size=128, normalize_timeseries=normalize_dataset)
+                acc = evaluate_model(model, did, dataset_name_, batch_size=batch_size, normalize_timeseries=normalize_dataset)
 
                 s = "%d,%s,%s,%0.6f\n" % (did, dname, dataset_name_, acc)
 
@@ -267,23 +267,22 @@ def train_val():
             print('*' * 20, "Successes", '*' * 20)
             print()
 
-            columns_list = ["id", "data_name", "method", "acc"]
+            result_csv_path = os.path.join("Results", "casas", dataset_name_.split("/")[0]+"_%s_%s.csv" % (epochs, batch_size))
 
-            df = pd.DataFrame(columns=columns_list)
+            if os.path.exists(result_csv_path):
+                df = pd.read_csv(result_csv_path, index_col=0)
+            else:
+                columns_list = ["data_name", "method", "acc"]
+                df = pd.DataFrame(columns=columns_list, index=list(range(len(dataset_map))))
 
             for line in successes:
                 l = line.split(",")
-                dict_restule = {
-                    "id": l[0],
-                    "data_name": l[1],
-                    "method": l[2],
-                    "acc": l[3][:-1],
-                }
-
-                df = df.append(dict_restule, ignore_index=True)
+                df.loc[df.index == int(l[0]), "data_name"] = l[1]
+                df.loc[df.index == int(l[0]), "method"] = l[2]
+                df.loc[df.index == int(l[0]), "acc"] = l[3][:-1]
 
             print(df)
-            df.to_csv(os.path.join("Results", "casas", l[2].split("/")[0]+".csv"))
+            df.to_csv(result_csv_path)
 
             print('\n\n')
             print('*' * 20, "Failures", '*' * 20)
@@ -291,6 +290,8 @@ def train_val():
             for line in failures:
                 print(line)
 
+    print("done...")
+
 
 if __name__ == "__main__":
-    train_val()
+    train_val(epochs=2, batch_size=128)
