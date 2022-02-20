@@ -248,7 +248,7 @@ if __name__ == "__main__":
                 NB_CLASS = NB_CLASSES_LIST[did]
 
                 # release GPU Memory
-                K.clear_session()
+                K.clear_session()  # 释放内存
 
                 file = open(base_log_name % (MODEL_NAME, cell), 'a+')
 
