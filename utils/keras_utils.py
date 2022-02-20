@@ -126,8 +126,8 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
         X_test = X_test[:val_subset]
         y_test = y_test[:val_subset]
 
-    if dataset_id == 2:  # 好像这句话无用
-        print("Loading train: ", TRAIN_FILES[dataset_id])
+    # if dataset_id == 2:  # 好像这句话无用
+    #     print("Loading train: ", TRAIN_FILES[dataset_id])
 
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, callbacks=callback_list,
               class_weight=class_weight, verbose=2, validation_data=(X_test, y_test))
