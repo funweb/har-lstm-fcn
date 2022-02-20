@@ -219,7 +219,7 @@ def train_val(epochs=2, batch_size=128):
                 file.write('%s,%s,%s,%s\n' % ('dataset_id', 'dataset_name', 'dataset_name_', 'test_accuracy'))
                 file.close()
 
-            for dname, did in dataset_map:  # 约束运行数据集的个数
+            for dname, did in dataset_map[0:3]:  # 约束运行数据集的个数
 
                 MAX_SEQUENCE_LENGTH = MAX_SEQUENCE_LENGTH_LIST[did]
                 NB_CLASS = NB_CLASSES_LIST[did]
