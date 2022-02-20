@@ -649,3 +649,13 @@ TEST_FILES = ['../datasets/casas/ende/cairo/9999/npy/3/cairo-train-x-0.npy',  # 
 
 TRAIN_FILES = ['../datasets/casas/ende/cairo/9999/npy/3/cairo-train-x-0.npy',  # 0
                ]
+
+
+
+
+# jupyter
+JUPYTER_TOKEN = {
+    "token_lists": ["root",  # win
+                    "8786ba7fd6db486eb13a6e4e79d5951a",  # 7920
+                    "ef6c4f2832454a65a1d9c2c7551af431"]  # 5810
+}
