@@ -7,3 +7,9 @@ dataset_id,dataset_name,dataset_name_,test_accuracy
 1,cairo_9999_1,alstmfcn_128_cells_weights/cairo_9999_1,0.636829
 0,cairo_9999_0,alstmfcn_128_cells_weights/cairo_9999_0,0.681122
 1,cairo_9999_1,alstmfcn_128_cells_weights/cairo_9999_1,0.634271
+0,cairo_9999_0,alstmfcn_128_cells_weights/cairo_9999_0,0.635204
+1,cairo_9999_1,alstmfcn_128_cells_weights/cairo_9999_1,0.698210
+0,cairo_9999_0,alstmfcn_128_cells_weights/cairo_9999_0,0.658163
+1,cairo_9999_1,alstmfcn_128_cells_weights/cairo_9999_1,0.639386
+0,cairo_9999_0,alstmfcn_128_cells_weights/cairo_9999_0,0.635204
+1,cairo_9999_1,alstmfcn_128_cells_weights/cairo_9999_1,0.664962

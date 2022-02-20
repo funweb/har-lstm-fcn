@@ -1,5 +1,6 @@
 import os
 
+import pandas as pd
 from keras import backend as K
 from keras.layers import Conv1D, BatchNormalization, GlobalAveragePooling1D, Permute, Dropout, Flatten
 from keras.layers import Input, Dense, LSTM, CuDNNLSTM, concatenate, Activation, GRU, SimpleRNN
@@ -38,7 +39,7 @@ def generate_lstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
 
     model = Model(ip, out)
 
-    model.summary()
+    # model.summary()
 
     # add load model code here to fine-tune
 
@@ -73,15 +74,14 @@ def generate_alstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
 
     model = Model(ip, out)
 
-    model.summary()
+    # model.summary()
 
     # add load model code here to fine-tune
 
     return model
 
 
-if __name__ == "__main__":
-
+def train_val():
     dataset_map = [('cairo_9999_0', 0),
                    ('cairo_9999_1', 1),
                    ('cairo_9999_2', 2),
@@ -267,8 +267,22 @@ if __name__ == "__main__":
             print('*' * 20, "Successes", '*' * 20)
             print()
 
+            columns_list = ["id", "data_name", "method", "acc"]
+
+            df = pd.DataFrame(columns=columns_list)
+
             for line in successes:
-                print(line)
+                l = line.split(",")
+                dict_restule = {
+                    "id": l[0],
+                    "data_name": l[1],
+                    "method": l[2],
+                    "acc": l[3][:-1],
+                }
+
+                df = df.append(dict_restule, ignore_index=True)
+
+            print(df)
 
             print('\n\n')
             print('*' * 20, "Failures", '*' * 20)
@@ -276,3 +290,7 @@ if __name__ == "__main__":
 
             for line in failures:
                 print(line)
+
+
+if __name__ == "__main__":
+    train_val()
