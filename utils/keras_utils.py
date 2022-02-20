@@ -109,7 +109,7 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
         if not os.path.exists(all_weights_path):
             os.makedirs(all_weights_path)
 
-    model_checkpoint = ModelCheckpoint("./weights/%s_weights.h5" % dataset_prefix, verbose=2,
+    model_checkpoint = ModelCheckpoint("./weights/%s_weights.h5" % dataset_prefix, verbose=0,
                                        monitor='loss', save_best_only=True, save_weights_only=True)
     reduce_lr = ReduceLROnPlateau(monitor='loss', patience=30, mode='auto',
                                   factor=factor, cooldown=0, min_lr=1e-4, verbose=0)
