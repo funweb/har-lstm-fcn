@@ -6,7 +6,8 @@ import matplotlib.pylab as plt
 
 mpl.style.use('seaborn-paper')
 
-from utils.constants import TRAIN_FILES, TEST_FILES, MAX_SEQUENCE_LENGTH_LIST, NB_CLASSES_LIST
+# from utils.constants import TRAIN_FILES, TEST_FILES, MAX_SEQUENCE_LENGTH_LIST, NB_CLASSES_LIST
+from utils.constants import TRAIN_FILES_X, TRAIN_FILES_Y, TEST_FILES_X, TEST_FILES_Y, MAX_SEQUENCE_LENGTH_LIST, NB_CLASSES_LIST
 
 
 def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.array, np.array):
@@ -29,20 +30,21 @@ def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.arra
         A tuple of shape (X_train, y_train, X_test, y_test, is_timeseries).  形状元组 (X_train, y_train, X_test, y_test, is_timeseries)。
         For legacy reasons, is_timeseries is always True.  由于遗留原因，is_timeseries 始终为 True。
     """
-    assert index < len(TRAIN_FILES), "Index invalid. Could not load dataset at %d" % index
-    if verbose: print("Loading train / test dataset : ", TRAIN_FILES[index], TEST_FILES[index])
+    assert index < len(TRAIN_FILES_X), "Index invalid. Could not load dataset at %d" % index
+    if verbose: print("Loading train / test dataset : ", TRAIN_FILES_X[index], TEST_FILES_X[index])
 
-    if index == 2:
-        print("now")
-
-    if os.path.exists(TRAIN_FILES[index]):
-        df = pd.read_csv(TRAIN_FILES[index], header=None, encoding='latin-1')
-
-    elif os.path.exists(TRAIN_FILES[index][1:]):
-        df = pd.read_csv(TRAIN_FILES[index][1:], header=None, encoding='latin-1')
-
+    if os.path.exists(TRAIN_FILES_X[index]):  # 寻找数据集路径。。。上级文件夹中寻找
+        npy_x = np.load(TRAIN_FILES_X[index], allow_pickle=True)
+        npy_y = np.load(TRAIN_FILES_Y[index], allow_pickle=True)
+        npy_data = np.append(npy_y.reshape(-1, 1), npy_x, axis=1)
+        df = pd.DataFrame(npy_data)
     else:
-        raise FileNotFoundError('File %s not found!' % (TRAIN_FILES[index]))
+        raise FileNotFoundError('File %s not found!' % (TRAIN_FILES_X[index]))
+
+
+
+
+
 
     is_timeseries = True  # assume all input data is univariate time series  # 假设所有输入数据都是单变量时间序列
 
@@ -59,7 +61,7 @@ def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.arra
     df.fillna(0, inplace=True)
 
     # cast all data into integer (int32)  # 将所有数据转换为整数 (int32)
-    if not is_timeseries:
+    if not is_timeseries:  # 上面是 True， 并没有执行
         df[df.columns] = df[df.columns].astype(np.int32)
 
     # extract labels Y and normalize to [0 - (MAX - 1)] range  # 提取标签 Y 并归一化为 [0 - (MAX - 1)] 范围
@@ -90,13 +92,13 @@ def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.arra
 
     if verbose: print("Finished loading train dataset..")
 
-    if os.path.exists(TEST_FILES[index]):
-        df = pd.read_csv(TEST_FILES[index], header=None, encoding='latin-1')
-
-    elif os.path.exists(TEST_FILES[index][1:]):
-        df = pd.read_csv(TEST_FILES[index][1:], header=None, encoding='latin-1')
+    if os.path.exists(TEST_FILES_X[index]):
+        npy_x = np.load(TEST_FILES_X[index], allow_pickle=True)
+        npy_y = np.load(TEST_FILES_Y[index], allow_pickle=True)
+        npy_data = np.append(npy_y.reshape(-1, 1), npy_x, axis=1)
+        df = pd.DataFrame(npy_data)
     else:
-        raise FileNotFoundError('File %s not found!' % (TEST_FILES[index]))
+        raise FileNotFoundError('File %s not found!' % (TEST_FILES_X[index]))
 
     # remove all columns which are completely empty
     df.dropna(axis=1, how='all', inplace=True)
@@ -149,7 +151,7 @@ def load_dataset_at(index, normalize_timeseries=False, verbose=True) -> (np.arra
 
 def calculate_dataset_metrics(X_train):
     """
-    Calculates the dataset metrics used for model building and evaluation.
+    Calculates the dataset metrics used for model building and evaluation.  计算用于模型构建和评估的数据集指标。
 
     Args:
         X_train: The training dataset.

@@ -58,9 +58,8 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
             If 2: Performs full dataset z-normalization.
         learning_rate: Initial learning rate.
     """
-    X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id,
-                                                                      normalize_timeseries=normalize_timeseries)
-    max_nb_words, sequence_length = calculate_dataset_metrics(X_train)
+    X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id, normalize_timeseries=normalize_timeseries)
+    max_nb_words, sequence_length = calculate_dataset_metrics(X_train)  # 计算数据长度
 
     if sequence_length != MAX_SEQUENCE_LENGTH_LIST[dataset_id]:
         if cutoff is None:
@@ -85,7 +84,7 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
                                  np.bincount(y_ind).astype(np.float64))
     class_weight = recip_freq[le.transform(classes)]
 
-    print("Class weights : ", class_weight)
+    print("Class weights : ", class_weight)  # 类别权重
 
     y_train = to_categorical(y_train, len(np.unique(y_train)))
     y_test = to_categorical(y_test, len(np.unique(y_test)))
@@ -125,7 +124,7 @@ def train_model(model: Model, dataset_id, dataset_prefix, epochs=50, batch_size=
         X_test = X_test[:val_subset]
         y_test = y_test[:val_subset]
 
-    if dataset_id == 2:
+    if dataset_id == 2:  # 好像这句话无用
         print("Loading train: ", TRAIN_FILES[dataset_id])
 
     model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, callbacks=callback_list,
@@ -546,18 +545,17 @@ def visualize_cam(model: Model, dataset_id, dataset_prefix, class_id,
 
     Args:
         model: A Keras Model.
-        dataset_id: Integer id representing the dataset index containd in
-            `utils/constants.py`.
+        dataset_id: Integer id representing the dataset index containd in `utils/constants.py`.
+                  : 表示 utils/constants.py 中包含的数据集索引的整数 id。
         dataset_prefix: Name of the dataset. Used for weight saving.
         class_id: Index of the class whose activation is to be visualized.
-        cutoff: Optional integer which slices of the first `cutoff` timesteps
-            from the input signal.
-        normalize_timeseries: Bool / Integer. Determines whether to normalize
-            the timeseries.
-
+                : 要可视化其激活的类的索引。
+        cutoff: Optional integer which slices of the first `cutoff` timesteps from the input signal.
+              : 可选整数，它从输入信号中分割第一个“cutoff”时间步长。
+        normalize_timeseries: Bool / Integer. Determines whether to normalize the timeseries.
+                            ：布尔/整数。 确定是否标准化时间序列。
             If False, does not normalize the time series.
-            If True / int not equal to 2, performs standard sample-wise
-                z-normalization.
+            If True / int not equal to 2, performs standard sample-wise z-normalization.
             If 2: Performs full dataset z-normalization.
         seed: Random seed number for Numpy.
     """

@@ -265,11 +265,9 @@ if __name__ == "__main__":
                 print('*' * 20, "Training model for dataset %s" % (dname), '*' * 20)
 
                 # comment out the training code to only evaluate !
-                train_model(model, did, dataset_name_, epochs=2, batch_size=128,
-                            normalize_timeseries=normalize_dataset)
+                train_model(model, did, dataset_name_, epochs=2, batch_size=128, normalize_timeseries=normalize_dataset)
 
-                acc = evaluate_model(model, did, dataset_name_, batch_size=128,
-                                     normalize_timeseries=normalize_dataset)
+                acc = evaluate_model(model, did, dataset_name_, batch_size=128, normalize_timeseries=normalize_dataset)
 
                 s = "%d,%s,%s,%0.6f\n" % (did, dname, dataset_name_, acc)
 

@@ -49,3 +49,9 @@ dataset_id,dataset_name,dataset_name_,test_accuracy
 1,ArrowHead,lstmfcn_8_cells_weights/ArrowHead,0.468571
 0,Adiac,lstmfcn_8_cells_weights/Adiac,0.040921
 1,ArrowHead,lstmfcn_8_cells_weights/ArrowHead,0.680000
+0,Adiac,lstmfcn_8_cells_weights/Adiac,0.061381
+1,ArrowHead,lstmfcn_8_cells_weights/ArrowHead,0.451429
+0,cairo_9999_0,lstmfcn_8_cells_weights/cairo_9999_0,0.650510
+1,cairo_9999_1,lstmfcn_8_cells_weights/cairo_9999_1,0.644501
+0,cairo_9999_0,lstmfcn_8_cells_weights/cairo_9999_0,0.653061
+1,cairo_9999_1,lstmfcn_8_cells_weights/cairo_9999_1,0.639386

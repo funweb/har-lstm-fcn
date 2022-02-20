@@ -3,3 +3,7 @@ dataset_id,dataset_name,dataset_name_,test_accuracy
 1,ArrowHead,lstmfcn_128_cells_weights/ArrowHead,0.594286
 0,Adiac,lstmfcn_128_cells_weights/Adiac,0.028133
 1,ArrowHead,lstmfcn_128_cells_weights/ArrowHead,0.628571
+0,cairo_9999_0,lstmfcn_128_cells_weights/cairo_9999_0,0.686224
+1,cairo_9999_1,lstmfcn_128_cells_weights/cairo_9999_1,0.695652
+0,cairo_9999_0,lstmfcn_128_cells_weights/cairo_9999_0,0.688776
+1,cairo_9999_1,lstmfcn_128_cells_weights/cairo_9999_1,0.695652
