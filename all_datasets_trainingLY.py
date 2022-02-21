@@ -81,7 +81,7 @@ def generate_alstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
     return model
 
 
-def train_val(epochs=2, batch_size=128):
+def train_val(epochs=2, batch_size=128, data_id=0):
     dataset_map = [('cairo_9999_0', 0),
                    ('cairo_9999_1', 1),
                    ('cairo_9999_2', 2),
@@ -219,7 +219,7 @@ def train_val(epochs=2, batch_size=128):
                 file.write('%s,%s,%s,%s\n' % ('dataset_id', 'dataset_name', 'dataset_name_', 'test_accuracy'))
                 file.close()
 
-            for dname, did in dataset_map:  # 约束运行数据集的个数
+            for dname, did in dataset_map[data_id::21]:  # 约束运行数据集的个数
 
                 MAX_SEQUENCE_LENGTH = MAX_SEQUENCE_LENGTH_LIST[did]
                 NB_CLASS = NB_CLASSES_LIST[did]
@@ -269,6 +269,9 @@ def train_val(epochs=2, batch_size=128):
 
             result_csv_path = os.path.join("Results", "casas", dataset_name_.split("/")[0]+"_%s_%s.csv" % (epochs, batch_size))
 
+            if not os.path.exists(os.path.join("Results", "casas")):
+                os.makedirs(os.path.join("Results", "casas"))
+
             if os.path.exists(result_csv_path):
                 df = pd.read_csv(result_csv_path, index_col=0)
             else:
@@ -294,4 +297,4 @@ def train_val(epochs=2, batch_size=128):
 
 
 if __name__ == "__main__":
-    train_val(epochs=2, batch_size=128)
+    train_val(epochs=2, batch_size=128, data_id=0)

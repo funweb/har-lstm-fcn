@@ -39,3 +39,13 @@ dataset_id,dataset_name,dataset_name_,test_accuracy
 0,cairo_9999_0,lstmfcn_64_cells_weights/cairo_9999_0,0.686224
 1,cairo_9999_1,lstmfcn_64_cells_weights/cairo_9999_1,0.677749
 0,cairo_9999_0,lstmfcn_64_cells_weights/cairo_9999_0,0.693878
+0,cairo_9999_0,lstmfcn_64_cells_weights/cairo_9999_0,0.676020
+21,milan_9999_0,lstmfcn_64_cells_weights/milan_9999_0,0.504077
+42,kyoto7_9999_0,lstmfcn_64_cells_weights/kyoto7_9999_0,0.585635
+63,kyoto8_9999_0,lstmfcn_64_cells_weights/kyoto8_9999_0,0.548063
+85,kyoto11_9999_0,lstmfcn_64_cells_weights/kyoto11_9999_0,0.452896
+0,cairo_9999_0,lstmfcn_64_cells_weights/cairo_9999_0,0.665816
+21,milan_9999_0,lstmfcn_64_cells_weights/milan_9999_0,0.508525
+42,kyoto7_9999_0,lstmfcn_64_cells_weights/kyoto7_9999_0,0.569061
+63,kyoto8_9999_0,lstmfcn_64_cells_weights/kyoto8_9999_0,0.555237
+85,kyoto11_9999_0,lstmfcn_64_cells_weights/kyoto11_9999_0,0.443534
