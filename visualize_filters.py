@@ -17,10 +17,10 @@ def generate_lstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
 
     ip = Input(shape=(1, MAX_SEQUENCE_LENGTH))
 
-    x = LSTM(NUM_CELLS)(ip)
+    x = LSTM(NUM_CELLS)(ip)  # 一个输入
     x = Dropout(0.8)(x)
 
-    y = Permute((2, 1))(ip)
+    y = Permute((2, 1))(ip)  # 另一个输入
     y = Conv1D(128, 8, padding='same', kernel_initializer='he_uniform')(y)
     y = BatchNormalization()(y)
     y = Activation('relu')(y)
@@ -39,7 +39,7 @@ def generate_lstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
 
     out = Dense(NB_CLASS, activation='softmax')(x)
 
-    model = Model(ip, out)
+    model = Model(ip, out, name="lstmfcn")
 
     model.summary()
 
@@ -85,19 +85,21 @@ def generate_attention_lstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
 
 if __name__ == '__main__':
     # COMMON PARAMETERS
-    DATASET_ID = 0
-    num_cells = 8
-    model = generate_lstmfcn  # Select model to build
+    DATASET_ID = 0  # 更改
+    num_cells = 8  # 更改
+    model = generate_lstmfcn  # Select model to build  # 模型在这里设置
 
     # OLD 85 DATASET PARAMETERS
-    dataset_name = '' # 'cbf'  # set to None to try to find out automatically for new datasets
+    # 自定义的 数据集 名字
+    from all_datasets_trainingLY import dataset_map
+    dataset_name = dataset_map[DATASET_ID][0]  # 'cbf'  # set to None to try to find out automatically for new datasets  设置为“无”以尝试自动查找新数据集
 
     # NEW 43 DATASET PARAMETERS
-    model_name = 'lstmfcn'
+    model_name = 'lstmfcn'  # 更改名称
 
     # Visualizaion params
     CONV_ID = 0
-    FILTER_ID = 0
+    FILTER_ID = 1  # 不知道为啥 后面 assert 0 了, 只能大于0 < 128
 
     """ <<<<< SCRIPT SETUP >>>>> """
     # Script setup
@@ -115,5 +117,4 @@ if __name__ == '__main__':
 
         dataset_name = weights_dir + dataset_name
 
-    visualize_filters(model, DATASET_ID, dataset_name, conv_id=CONV_ID, filter_id=FILTER_ID, seed=0,
-                      normalize_timeseries=True)
+    visualize_filters(model, DATASET_ID, dataset_name, conv_id=CONV_ID, filter_id=FILTER_ID, seed=0, normalize_timeseries=True)

@@ -429,6 +429,7 @@ def cutoff_choice(dataset_id, sequence_length):
 def cutoff_sequence(X_train, X_test, choice, dataset_id, sequence_length):
     """
     Slices of the first `cutoff` timesteps from the input signal.
+    从输入信号开始的第一个“截止”时间步的切片。
 
     Args:
         X_train: Train sequences.
@@ -438,8 +439,16 @@ def cutoff_sequence(X_train, X_test, choice, dataset_id, sequence_length):
         sequence_length: Original length of the sequence.
 
     Returns:
-        A tuple of (X_train, X_test) after slicing off the requisit number of
-        timesteps.
+        A tuple of (X_train, X_test) after slicing off the requisit number of timesteps.
+
+    Args:
+        X_train: Train sequences.
+        X_test: Test sequences.
+        choice：用户选择的切片方法。
+        dataset_id: utils/constants内的数据集的整数id。py`。
+        sequence_length：序列的原始长度。
+    Returns：
+        一组(X_train, X_test) 在切掉所需的时间步数之后。
     """
     assert MAX_SEQUENCE_LENGTH_LIST[dataset_id] < sequence_length, "If sequence is to be cut, max sequence" \
                                                                    "length must be less than original sequence length."

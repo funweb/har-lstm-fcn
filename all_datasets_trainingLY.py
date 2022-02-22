@@ -81,8 +81,7 @@ def generate_alstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
     return model
 
 
-def train_val(epochs=2, batch_size=128, data_id=0):
-    dataset_map = [('cairo_9999_0', 0),
+dataset_map = [('cairo_9999_0', 0),
                    ('cairo_9999_1', 1),
                    ('cairo_9999_2', 2),
                    ('cairo_999_0', 3),
@@ -188,6 +187,8 @@ def train_val(epochs=2, batch_size=128, data_id=0):
                    ('kyoto11_5_1', 103),
                    ('kyoto11_5_2', 104),
                    ]
+
+def train_val(epochs=2, batch_size=128, data_id=0):
 
     print("Num datasets : ", len(dataset_map))
     print()

@@ -244,10 +244,11 @@ def set_trainable(layer, value):
 def build_function(model, layer_names=None, outputs=None):
     """
     Builds a Keras Function which retrieves the output of a Layer.
+    构建一个 Keras 函数，用于检索层的输出。
 
     Args:
         model: Keras Model.
-        layer_names: Name of the layer whose output is required.
+        layer_names: Name of the layer whose output is required.  # 需要输出的图层的名称。
         outputs: Output tensors.
 
     Returns:
@@ -266,7 +267,7 @@ def build_function(model, layer_names=None, outputs=None):
     else:
         outputs = outputs
 
-    funcs = [K.function([inp] + [K.learning_phase()], [out]) for out in outputs]  # evaluation functions
+    funcs = [K.function([inp] + [K.learning_phase()], [out]) for out in outputs]  # evaluation functions 评价函数
     return funcs
 
 
@@ -739,35 +740,45 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
                       normalize_timeseries=False):
     """
     Used to visualize the output filters of a particular convolution layer.
+    用于可视化特定卷积层的输出滤波器。
 
     Args:
         model: A Keras Model.
-        dataset_id: Integer id representing the dataset index containd in
-            `utils/constants.py`.
+        dataset_id: Integer id representing the dataset index containd in `utils/constants.py`.
         dataset_prefix: Name of the dataset. Used for weight saving.
-        conv_id: Convolution layer ID. Can be 0, 1 or 2 for LSTMFCN and
-            its univariate variants (as it uses 3 Conv blocks).
+        conv_id: Convolution layer ID. Can be 0, 1 or 2 for LSTMFCN and its univariate variants (as it uses 3 Conv blocks).
         filter_id: ID of the filter that is under observation.
         seed: Numpy random seed.
-        cutoff: Optional integer which slices of the first `cutoff` timesteps
-            from the input signal.
-        normalize_timeseries: Bool / Integer. Determines whether to normalize
-            the timeseries.
+        cutoff: Optional integer which slices of the first `cutoff` timesteps from the input signal.
+        normalize_timeseries: Bool / Integer. Determines whether to normalize the timeseries.
 
             If False, does not normalize the time series.
             If True / int not equal to 2, performs standard sample-wise
                 z-normalization.
             If 2: Performs full dataset z-normalization.
-    """
 
+    Args:
+        模型：Keras模型。
+        dataset_id：整数id，表示包含在“utils/constants”中的数据集索引。py`。
+        数据集前缀：数据集的名称。用于 weight saving。
+        conv_id：卷积层id。对于 LSTMFCN 及其单变量变量变量变量（因为它使用3个conv块），可以是0、1或2。
+        filter_id：被观察过滤器的id。
+        种子：随机种子。
+        截止(cutoff)：可选整数，从输入信号中分割第一个“截止”时间步。
+        规范化_时间序列：Bool/Integer。确定是否规范化时间序列。
+            如果为False，则不规范时间序列。
+            如果True/int不等于2，则执行标准采样
+            z-归一化。
+            If 2：执行完整的数据集z规范化。
+    """
     np.random.seed(seed)
 
     assert conv_id >= 0 and conv_id < 3, "Convolution layer ID must be between 0 and 2"
 
-    X_train, y_train, _, _, is_timeseries = load_dataset_at(dataset_id,
-                                                            normalize_timeseries=normalize_timeseries)
+    X_train, y_train, _, _, is_timeseries = load_dataset_at(dataset_id, normalize_timeseries=normalize_timeseries)
     _, sequence_length = calculate_dataset_metrics(X_train)
 
+    # 切分数据到需要的长度, 可以选择前向或者后向
     if sequence_length != MAX_SEQUENCE_LENGTH_LIST[dataset_id]:
         if cutoff is None:
             choice = cutoff_choice(dataset_id, sequence_length)
@@ -779,9 +790,11 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
             return
         else:
             X_train, _ = cutoff_sequence(X_train, _, choice, dataset_id, sequence_length)
+    # 至此, 数据载入完毕
 
     model.load_weights("./weights/%s_weights.h5" % dataset_prefix)
 
+    # ???
     conv_layers = [layer for layer in model.layers
                    if layer.__class__.__name__ == 'Conv1D']
 
@@ -799,17 +812,17 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
     if dataset_name is None or len(dataset_name) == 0:
         dataset_name = dataset_prefix
 
-    # Select single datapoint
+    # Select single datapoint  选择单个数据点
     sample_index = np.random.randint(0, X_train.shape[0])
     y_id = y_train[sample_index, 0]
     sequence_input = X_train[[sample_index], :, :]
 
-    # Get features of the cnn layer out
+    # Get features of the cnn layer out  获取cnn层输出的特征
     conv_out = get_outputs(model, sequence_input, eval_functions)[0]
 
     conv_out = conv_out[0, :, :]  # [T, C]
 
-    # select single filter
+    # select single filter  选择单个过滤器
     assert filter_id > 0 and filter_id < conv_out.shape[-1]
     channel = conv_out[:, filter_id]
     channel = channel.reshape((-1, 1))
@@ -818,32 +831,21 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
     conv_filters.to_csv('cnn_filters/%s_features.csv' % (dataset_prefix), header=None, index=False)
 
     sequence_input = sequence_input[0, :, :].transpose()
-    sequence_df = pd.DataFrame(sequence_input,
-                               index=range(sequence_input.shape[0]))
+    sequence_df = pd.DataFrame(sequence_input, index=range(sequence_input.shape[0]))
 
-    conv_cam_df = pd.DataFrame(conv_filters,
-                               index=range(conv_filters.shape[0]))
+    conv_cam_df = pd.DataFrame(conv_filters, index=range(conv_filters.shape[0]))
 
-    fig, axs = plt.subplots(2, 1, squeeze=False,
-                            figsize=(6, 6))
+    fig, axs = plt.subplots(2, 1, squeeze=False, figsize=(6, 6))
 
     class_label = y_id + 1
 
     plt.rcParams.update({'font.size': 24})
 
-    sequence_df.plot(title='Dataset %s : Sequence ID = %d (class = %d)' % (dataset_name,
-                                                                           sample_index + 1,
-                                                                           class_label),
-                     subplots=False,
-                     legend=None,
-                     ax=axs[0][0])
+    sequence_df.plot(title='Dataset %s : Sequence ID = %d (class = %d)' % (dataset_name, sample_index + 1, class_label),
+                     subplots=False, legend=None, ax=axs[0][0])
 
-    conv_cam_df.plot(title='Convolution Layer %d Filter ID %d (class = %d)' % (conv_id + 1,
-                                                                               filter_id + 1,
-                                                                               class_label),
-                     subplots=False,
-                     legend=None,
-                     ax=axs[1][0])
+    conv_cam_df.plot(title='Convolution Layer %d Filter ID %d (class = %d)' % (conv_id + 1, filter_id + 1, class_label),
+                     subplots=False, legend=None, ax=axs[1][0])
 
     # Formatting
     plt.xlabel('Timesteps', axes=axs[0][0])
