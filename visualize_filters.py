@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
     # Visualizaion params
     CONV_ID = 0
-    FILTER_ID = 1  # 不知道为啥 后面 assert 0 了, 只能大于0 < 128
+    FILTER_ID = 1  # 不知道为啥 后面 assert 0 了, 只能大于0 < channel (C)
 
     """ <<<<< SCRIPT SETUP >>>>> """
     # Script setup

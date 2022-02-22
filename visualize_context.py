@@ -2,6 +2,7 @@ from keras.models import Model
 from keras.layers import Input, PReLU, Dense, LSTM, CuDNNLSTM, concatenate, Activation
 from keras.layers import Conv1D, BatchNormalization, GlobalAveragePooling1D, Permute, Dropout
 
+from all_datasets_trainingLY import dataset_map
 from utils.constants import MAX_SEQUENCE_LENGTH_LIST, NB_CLASSES_LIST, TRAIN_FILES
 from utils.generic_utils import load_dataset_at
 from utils.keras_utils import visualize_context_vector
@@ -49,13 +50,13 @@ def generate_attention_lstmfcn(MAX_SEQUENCE_LENGTH, NB_CLASS, NUM_CELLS=8):
 
 
 if __name__ == '__main__':
-    # COMMON PARAMETERS
+    # COMMON PARAMETERS  公共参数
     DATASET_ID = 0
     num_cells = 8
     model = generate_attention_lstmfcn  # Select model to build
 
     # OLD 85 DATASET PARAMETERS
-    dataset_name = '' # 'cbf'  # set to None to try to find out automatically for new datasets
+    dataset_name = dataset_map[DATASET_ID][0]  # 'cbf'  # set to None to try to find out automatically for new datasets
 
     # NEW 43 DATASET PARAMETERS
     model_name = 'alstmfcn'

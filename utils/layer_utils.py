@@ -123,8 +123,8 @@ class AttentionLSTMCell(Layer):
             recurrent_dropout: Float between 0 and 1.
                 Fraction of the units to drop for
                 the linear transformation of the recurrent state.
-            return_attention: Returns the attention vector instead of
-                the internal state.
+            return_attention: Returns the attention vector instead of the internal state.
+                返回 attention vector，而不是 internal state。
 
         # References
             - [Long short-term memory](http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf) (original 1997 paper)

@@ -256,8 +256,8 @@ def build_function(model, layer_names=None, outputs=None):
     """
     inp = model.input
 
-    if layer_names is not None and (type(layer_names) != list and type(layer_names) != tuple):
-        layer_names = [layer_names]
+    if layer_names is not None and (type(layer_names) != list and type(layer_names) != tuple):  # layer_names: 如果来自 filters, 那就是 list
+        layer_names = [layer_names]  # 最后转为 list
 
     if outputs is None:
         if layer_names is None:
@@ -273,11 +273,11 @@ def build_function(model, layer_names=None, outputs=None):
 
 def get_outputs(model, inputs, eval_functions, verbose=False):
     """
-    Gets the outputs of the Keras model.
+    Gets the outputs of the Keras model.  获取Keras模型的输出。
 
     Args:
-        model: Unused.
-        inputs: Input numpy arrays.
+        model: Unused.  # 无使用
+        inputs: Input numpy arrays.  # 输入数据
         eval_functions: Keras functions for evaluation.
         verbose: Whether to print evaluation metrics.
 
@@ -295,36 +295,32 @@ def get_outputs(model, inputs, eval_functions, verbose=False):
 def visualize_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=None, limit=None,
                              normalize_timeseries=False, visualize_sequence=True, visualize_classwise=False):
     """
-    Visualize the Context Vector of the Attention LSTM.
+    Visualize the Context Vector of the Attention LSTM.  将注意力 LSTM 的上下文向量可视化。
 
     Args:
         model: an Attention LSTM-FCN Model.
-        dataset_id: Integer id representing the dataset index containd in
-            `utils/constants.py`.
+        dataset_id: Integer id representing the dataset index containd in `utils/constants.py`.
         dataset_prefix: Name of the dataset. Used for weight saving.
         batch_size: Size of each batch for evaluation.
-        test_data_subset: Optional integer id to subset the test set. To be used if
-            the test set evaluation time is significantly.
-        cutoff: Optional integer which slices of the first `cutoff` timesteps
-            from the input signal.
+        test_data_subset: Optional integer id to subset the test set. To be used if the test set evaluation time is significantly.
+            test_data_subset: 可选整数id，用于测试集的子集。当测试集评估时间显著缩短时使用。
+        cutoff: Optional integer which slices of the first `cutoff` timesteps from the input signal.
+            cutoff: 可选整数，从输入信号中分割第一个“截止”时间步长。
         limit: Number of samples to be visualized in one plot.
-        normalize_timeseries: Bool / Integer. Determines whether to normalize
-            the timeseries.
+            limit: 一个绘图中要可视化的样本数。
+        normalize_timeseries: Bool / Integer. Determines whether to normalize the timeseries.
 
             If False, does not normalize the time series.
             If True / int not equal to 2, performs standard sample-wise
                 z-normalization.
             If 2: Performs full dataset z-normalization.
-        visualize_sequence: Bool flag, whetehr to visualize the sequence attended to
-            by the Context Vector or just the Context Vector itself.
-        visualize_classwise: Bool flag. Wheter to visualize the samples
-            seperated by class. When doing so, `limit` is multiplied by
-            the number of classes so it is better to set `limit` to 1 in
-            such cases.
+        visualize_sequence: Bool flag, whetehr to visualize the sequence attended to by the Context Vector or just the Context Vector itself.
+            visualize_sequence:Bool，用于显示上下文向量关注的序列，还是仅显示上下文向量本身。
+        visualize_classwise: Bool flag. Wheter to visualize the samples seperated by class. When doing so, `limit` is multiplied by the number of classes so it is better to set `limit` to 1 in such cases.
+            visualize_classwise：布尔。Wheter 将样本按类别进行可视化。这样做时，“limit” 乘以类的数量，因此在这种情况下最好将“limit”设置为1。
     """
 
-    X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id,
-                                                                      normalize_timeseries=normalize_timeseries)
+    X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id, normalize_timeseries=normalize_timeseries)
     _, sequence_length = calculate_dataset_metrics(X_train)
 
     if sequence_length != MAX_SEQUENCE_LENGTH_LIST[dataset_id]:
@@ -345,11 +341,11 @@ def visualize_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=No
     if len(attn_lstm_layer) == 0:
         raise AttributeError('Provided model does not have an Attention layer')
     else:
-        i, attn_lstm_layer = attn_lstm_layer[0]  # use first attention lstm layer only
+        i, attn_lstm_layer = attn_lstm_layer[0]  # use first attention lstm layer only  仅使用第一注意lstm层
 
-    attn_lstm_layer.return_attention = True
+    attn_lstm_layer.return_attention = True  # return_attention: 返回注意向量，而不是内部状态。
 
-    model.layers[i] = attn_lstm_layer
+    model.layers[i] = attn_lstm_layer  # 谜之操作, 为什么获得的是第10层, 现如今又重新赋值
     model.load_weights("./weights/%s_weights.h5" % dataset_prefix)
 
     attention_output = model.layers[i].call(model.input)
@@ -373,7 +369,7 @@ def visualize_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=No
                 attention_vector.max() - attention_vector.min())
         attention_vector = (attention_vector * 2.) - 1.
 
-        attention_vector = resize(attention_vector, output_shape, mode='reflect', anti_aliasing=True)
+        attention_vector = resize(attention_vector, output_shape, mode='reflect', anti_aliasing=True)  # resize 的 reflect 难以理解
         attention_vector = attention_vector.reshape([1, -1])
         train_attention_vectors.append(attention_vector)
 
@@ -386,9 +382,9 @@ def visualize_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=No
         # print("activations", activations.shape)
         attention_vector = activations.reshape((-1, 1, 1))
 
-        attention_vector = (attention_vector - attention_vector.min()) / (
+        attention_vector = (attention_vector - attention_vector.min()) / (  # 归一化
                 attention_vector.max() - attention_vector.min())
-        attention_vector = (attention_vector * 2.) - 1.
+        attention_vector = (attention_vector * 2.) - 1.  # 拓展到 [-1, 1], 是么???
 
         attention_vector = resize(attention_vector, output_shape, mode='reflect', anti_aliasing=True)
         attention_vector = attention_vector.reshape([1, -1])
@@ -401,7 +397,7 @@ def visualize_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=No
     print("Test Attentin Vectors Shape :", test_attention_vectors.shape)
 
     if visualize_sequence:
-        # plot input sequence part that is paid attention too in detail
+        # plot input sequence part that is paid attention too in detail  绘制输入顺序部分，也要注意细节
         X_train_attention = train_attention_vectors * X_train
         X_test_attention = test_attention_vectors * X_test
 
@@ -544,7 +540,7 @@ def write_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=None, 
 def visualize_cam(model: Model, dataset_id, dataset_prefix, class_id,
                   cutoff=None, normalize_timeseries=False, seed=0):
     """
-    Used to visualize the Class Activation Maps of the Keras Model.
+    Used to visualize the Class Activation Maps of the Keras Model.  用于可视化Keras模型的类激活图。
 
     Args:
         model: A Keras Model.
@@ -600,20 +596,20 @@ def visualize_cam(model: Model, dataset_id, dataset_prefix, class_id,
 
     model.load_weights("./weights/%s_weights.h5" % dataset_prefix)
 
-    class_weights = model.layers[-1].get_weights()[0]
+    class_weights = model.layers[-1].get_weights()[0]  # 获得最后一层权重
 
-    conv_layers = [layer for layer in model.layers if layer.__class__.__name__ == 'Conv1D']
+    conv_layers = [layer for layer in model.layers if layer.__class__.__name__ == 'Conv1D']  # 全部卷积层
 
-    final_conv = conv_layers[-1].name
-    final_softmax = model.layers[-1].name
+    final_conv = conv_layers[-1].name  # 最后一层卷积层
+    final_softmax = model.layers[-1].name  # softmax 分类层
     out_names = [final_conv, final_softmax]
 
     if class_id > 0:
         class_id = class_id - 1
 
-    y_train_ids = np.where(y_train[:, 0] == class_id)
-    sequence_input = X_train[y_train_ids[0], ...]
-    choice = np.random.choice(range(len(sequence_input)), 1)
+    y_train_ids = np.where(y_train[:, 0] == class_id)  # 找出来其中的训练数据集
+    sequence_input = X_train[y_train_ids[0], ...]  # 所有的训练数据集
+    choice = np.random.choice(range(len(sequence_input)), 1)  # 随机选择一个
     sequence_input = sequence_input[choice, :, :]
 
     eval_functions = build_function(model, out_names)
@@ -623,9 +619,9 @@ def visualize_cam(model: Model, dataset_id, dataset_prefix, class_id,
 
     conv_out = (conv_out - conv_out.min(axis=0, keepdims=True)) / \
                (conv_out.max(axis=0, keepdims=True) - conv_out.min(axis=0, keepdims=True))
-    conv_out = (conv_out * 2.) - 1.
+    conv_out = (conv_out * 2.) - 1.  # 不知道这个操作是为了啥
 
-    conv_out = conv_out.transpose((1, 0))  # (C, T)
+    conv_out = conv_out.transpose((1, 0))  # (C, T)  # 维度转换  (长度, C) -> (C, T)
     conv_channels = conv_out.shape[0]
 
     conv_cam = class_weights[:conv_channels, [class_id]] * conv_out
@@ -812,7 +808,7 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
     if dataset_name is None or len(dataset_name) == 0:
         dataset_name = dataset_prefix
 
-    # Select single datapoint  选择单个数据点
+    # Select single datapoint  选择单个数据点, 也就是随机的选择一条数据, 索引为: sample_index
     sample_index = np.random.randint(0, X_train.shape[0])
     y_id = y_train[sample_index, 0]
     sequence_input = X_train[[sample_index], :, :]
@@ -820,7 +816,7 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
     # Get features of the cnn layer out  获取cnn层输出的特征
     conv_out = get_outputs(model, sequence_input, eval_functions)[0]
 
-    conv_out = conv_out[0, :, :]  # [T, C]
+    conv_out = conv_out[0, :, :]  # [T, C]  # 去掉首维数据, 保留 T, C
 
     # select single filter  选择单个过滤器
     assert filter_id > 0 and filter_id < conv_out.shape[-1]
@@ -867,8 +863,7 @@ def extract_features(model: Model, dataset_id, dataset_prefix,
     layer_name = layer_name.lower()
     assert layer_name in ['cnn', 'lstm', 'lstmfcn']
 
-    X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id,
-                                                                      normalize_timeseries=normalize_timeseries)
+    X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id, normalize_timeseries=normalize_timeseries)
     _, sequence_length = calculate_dataset_metrics(X_train)
 
     if sequence_length != MAX_SEQUENCE_LENGTH_LIST[dataset_id]:
