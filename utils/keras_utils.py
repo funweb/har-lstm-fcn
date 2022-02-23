@@ -223,10 +223,10 @@ def loss_model(model: Model, dataset_id, dataset_prefix, batch_size=128, train_d
 
 def set_trainable(layer, value):
     """
-    Sets the layers of the Model to be trainable or not.
+    Sets the layers of the Model to be trainable or not.  将模型的层设置为可训练或不可训练。
 
     Args:
-        layer: can be a single Layer of a Model, or an entire Model.
+        layer: can be a single Layer of a Model, or an entire Model.  可以是模型的单层，也可以是整个模型。
         value: True or False.
     """
     layer.trainable = value
@@ -279,7 +279,7 @@ def get_outputs(model, inputs, eval_functions, verbose=False):
         model: Unused.  # 无使用
         inputs: Input numpy arrays.  # 输入数据
         eval_functions: Keras functions for evaluation.
-        verbose: Whether to print evaluation metrics.
+        verbose: Whether to print evaluation metrics.  是否打印评估指标。
 
     Returns:
         List of outputs of the Keras Model.
@@ -426,6 +426,7 @@ def visualize_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=No
 def write_context_vector(model: Model, dataset_id, dataset_prefix, cutoff=None, limit=None,
                          normalize_timeseries=False, visualize_sequence=True, visualize_classwise=False):
     """ Same as visualize_context_vector, but writes the context vectors to a file. Unused. """
+    """ 与可视化上下文向量相同，但将上下文向量写入文件。没用过。 """
 
     X_train, y_train, X_test, y_test, is_timeseries = load_dataset_at(dataset_id,
                                                                       normalize_timeseries=normalize_timeseries)
@@ -859,6 +860,7 @@ def visualize_filters(model: Model, dataset_id, dataset_prefix,
 def extract_features(model: Model, dataset_id, dataset_prefix,
                      layer_name, cutoff=None, normalize_timeseries=False):
     """ Same as visualize_features, but saves them to a file instead. """
+    """ 与可视化功能相同，但将其保存到文件中。 """
 
     layer_name = layer_name.lower()
     assert layer_name in ['cnn', 'lstm', 'lstmfcn']
