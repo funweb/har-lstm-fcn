@@ -203,6 +203,7 @@ def train_val(epochs=2, batch_size=128, data_id=0):
 
     # Number of cells
     CELLS = [8, 64, 128]
+    CELLS = [8]
 
     # Normalization scheme
     # Normalize = False means no normalization will be done
